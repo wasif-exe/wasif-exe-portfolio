@@ -1,0 +1,44 @@
+.live-stats-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 28px;
+  background-color: rgba(6, 6, 6, 0.92);
+  border-bottom: 1px solid rgba(57, 255, 20, 0.3);
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+  gap: 1.5rem;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 11px;
+  color: #ccc;
+  z-index: 99999;
+  user-select: none;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-sizing: border-box;
+}
+
+.stat-item.highlight {
+  color: #39ff14;
+  font-weight: bold;
+  animation: stats-blink 2s infinite;
+}
+
+@keyframes stats-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
+}
+
+@media (max-width: 768px) {
+  .hidden-mobile {
+    display: none;
+  }
+  .live-stats-bar {
+    gap: 0.6rem;
+    font-size: 10px;
+    justify-content: space-between;
+    padding: 0 0.75rem;
+  }
+}

@@ -1,0 +1,29 @@
+.palette-overlay {
+  position: fixed; inset: 0; background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px); z-index: 999999;
+  display: flex; justify-content: center; padding-top: 15vh;
+}
+.palette-modal {
+  width: 90%; max-width: 600px; background: #0a0a0a;
+  border: 1px solid rgba(57, 255, 20, 0.4); border-radius: 8px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.8); overflow: hidden; height: fit-content;
+}
+.palette-header {
+  padding: 1rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.palette-input {
+  background: transparent; border: none; color: #fff; font-family: monospace;
+  font-size: 1.1rem; width: 100%; outline: none;
+}
+.palette-hint { font-size: 10px; color: #666; font-family: monospace; }
+.palette-results { padding: 0.5rem; max-height: 300px; overflow-y: auto; }
+.palette-item {
+  padding: 0.75rem 1rem; color: #aaa; font-family: monospace;
+  font-size: 0.95rem; cursor: pointer; border-radius: 4px;
+  display: flex; align-items: center; gap: 10px;
+}
+.palette-item.selected { background: rgba(57, 255, 20, 0.15); color: #39ff14; }
+.cmd-icon { color: #555; }
+.palette-item.selected .cmd-icon { color: #39ff14; }
+.palette-empty { padding: 1rem; color: #666; font-family: monospace; text-align: center; }

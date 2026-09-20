@@ -1,0 +1,128 @@
+.infinite-menu-container {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+#infinite-grid-menu-canvas {
+  cursor: grab;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  outline: none;
+  touch-action: none;
+  z-index: 1;
+  display: block;
+}
+
+#infinite-grid-menu-canvas:active {
+  cursor: grabbing;
+}
+
+.menu-content {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+  transition: opacity 0.3s ease;
+}
+
+.menu-content.active {
+  opacity: 1;
+}
+
+.menu-content.inactive {
+  opacity: 0;
+}
+
+.face-title {
+  position: absolute;
+  font-weight: 900;
+  font-size: clamp(1.5rem, 4vw, 3rem);
+  left: 8%;
+  top: 50%;
+  transform: translateY(-50%);
+  color: white;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+  margin: 0;
+  font-family: monospace;
+  max-width: 36%;
+  word-break: break-word;
+}
+
+.face-description {
+  position: absolute;
+  max-width: 280px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: clamp(0.85rem, 1.6vw, 1.05rem);
+  right: 8%;
+  color: #ccc;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.9);
+  line-height: 1.45;
+  margin: 0;
+  font-family: monospace;
+}
+
+.action-button {
+  position: absolute;
+  bottom: 18%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 56px;
+  height: 56px;
+  display: grid;
+  place-items: center;
+  background: #39ff14;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 3px solid #000;
+  transition: transform 0.2s ease, background 0.2s ease;
+  pointer-events: auto;
+}
+
+.action-button:hover {
+  transform: translateX(-50%) scale(1.08);
+  background: #fff;
+}
+
+.action-button-icon {
+  color: #000;
+  font-size: 22px;
+  font-weight: bold;
+  line-height: 1;
+}
+
+@media (max-width: 768px) {
+  .face-title {
+    width: 92%;
+    max-width: none;
+    text-align: center;
+    left: 4%;
+    right: 4%;
+    top: 12%;
+    transform: none;
+  }
+
+  .face-description {
+    width: 90%;
+    max-width: none;
+    text-align: center;
+    right: auto;
+    left: 50%;
+    top: auto;
+    bottom: 14%;
+    transform: translateX(-50%);
+    background: rgba(10, 10, 10, 0.82);
+    padding: 0.85rem 1rem;
+    border-radius: 8px;
+    border: 1px solid rgba(57, 255, 20, 0.25);
+  }
+
+  .action-button {
+    bottom: 30%;
+  }
+}

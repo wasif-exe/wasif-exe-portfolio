@@ -1,38 +1,152 @@
 .App {
-  text-align: center;
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background-color: #000;
 }
 
-.App-logo {
-  height: 40vmin;
+#root {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.loading-screen {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.terminal-box {
+  display: inline-block;
+  text-align: left;
+  padding: 1.25rem 1.5rem;
+  border: 1px solid rgba(57, 255, 20, 0.6);
+  border-radius: 6px;
+  background-color: rgba(0, 0, 0, 0.88);
+  width: min(90vw, 400px);
+  height: fit-content;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 0 25px rgba(57, 255, 20, 0.15);
+  box-sizing: border-box;
+}
+
+.terminal-line {
+  font-family: "Courier New", Courier, monospace;
+  font-size: 13px;
+  line-height: 1.45;
+  height: auto;
+}
+
+.line-break {
+  display: block;
+  height: 0.6em;
+}
+
+.revealed-text {
+  color: #39ff14;
+  font-weight: 600;
+}
+
+.encrypted-text {
+  color: #007700;
+}
+
+.blinking-cursor {
+  color: #39ff14;
+  font-size: 14px;
+  font-weight: bold;
+  animation: blink 0.8s infinite;
+  display: inline-block;
+  margin-top: 2px;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.main-site {
+  position: relative;
+  color: #fff;
+  width: 100%;
+  min-height: 100vh;
+  font-family: "Courier New", Courier, monospace;
+  overflow-x: hidden;
+  z-index: 1;
+}
+
+.particles-wrapper {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
   pointer-events: none;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.particles-background {
+  width: 100%;
+  height: 100%;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.ascii-container {
+  position: absolute;
+  inset: 0;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 5;
+  pointer-events: none;
+  padding: 1rem;
+}
+
+.mute-button {
+  position: fixed;
+  bottom: 100px;
+  right: 20px;
+  background: rgba(0, 0, 0, 0.75);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  transition: background 0.2s ease, border-color 0.2s ease;
+  z-index: 9998;
 }
 
-.App-link {
-  color: #61dafb;
+.mute-button:hover {
+  background: rgba(57, 255, 20, 0.15);
+  border-color: rgba(57, 255, 20, 0.5);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+@media (max-width: 768px) {
+  .terminal-box {
+    padding: 1rem;
+    width: 92vw;
   }
-  to {
-    transform: rotate(360deg);
+
+  .terminal-line {
+    font-size: 12px;
+  }
+
+  .mute-button {
+    bottom: 90px;
+    right: 14px;
+    width: 40px;
+    height: 40px;
   }
 }

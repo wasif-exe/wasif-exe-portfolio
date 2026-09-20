@@ -1,0 +1,176 @@
+.skills-page {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 2;
+  background: transparent;
+  padding-top: 28px;
+  box-sizing: border-box;
+}
+
+.skills-fallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #39ff14;
+  font-size: 1.1rem;
+  font-family: monospace;
+}
+
+.skills-toggle {
+  position: absolute;
+  top: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  display: flex;
+  gap: 0.4rem;
+  background: rgba(0, 0, 0, 0.75);
+  border: 1px solid rgba(57, 255, 20, 0.3);
+  border-radius: 999px;
+  padding: 0.25rem;
+  backdrop-filter: blur(8px);
+}
+
+.skills-toggle button {
+  border: none;
+  background: transparent;
+  color: #888;
+  font-family: monospace;
+  font-size: 0.75rem;
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.skills-toggle button.active {
+  background: rgba(57, 255, 20, 0.15);
+  color: #39ff14;
+}
+
+.htop-shell {
+  width: min(960px, 94vw);
+  margin: 5rem auto 6rem;
+  background: rgba(5, 8, 5, 0.92);
+  border: 1px solid rgba(57, 255, 20, 0.35);
+  border-radius: 8px;
+  font-family: "Courier New", Courier, monospace;
+  color: #cfc;
+  box-shadow: 0 0 30px rgba(57, 255, 20, 0.08);
+  overflow: hidden;
+}
+
+.htop-header {
+  background: rgba(57, 255, 20, 0.08);
+  border-bottom: 1px solid rgba(57, 255, 20, 0.25);
+  padding: 0.65rem 0.9rem;
+  font-size: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  color: #9f9;
+}
+
+.htop-table-head,
+.htop-row {
+  display: grid;
+  grid-template-columns: 50px 70px 40px 30px 1fr 60px 1.4fr;
+  gap: 0.4rem;
+  padding: 0.35rem 0.9rem;
+  font-size: 0.75rem;
+  align-items: center;
+}
+
+.htop-table-head {
+  color: #39ff14;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  font-weight: 700;
+}
+
+.htop-row:nth-child(even) {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.htop-row:hover {
+  background: rgba(57, 255, 20, 0.08);
+}
+
+.state-r {
+  color: #39ff14;
+  font-weight: 700;
+}
+
+.state-s {
+  color: #6a6;
+}
+
+.cpu-cell {
+  position: relative;
+  height: 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.cpu-bar {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: linear-gradient(90deg, rgba(57, 255, 20, 0.3), #39ff14);
+}
+
+.cpu-label {
+  position: relative;
+  z-index: 1;
+  padding-left: 4px;
+  font-size: 0.68rem;
+  color: #fff;
+  mix-blend-mode: difference;
+}
+
+.cmd-cell {
+  color: #e8ffe8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.htop-footer {
+  border-top: 1px solid rgba(57, 255, 20, 0.2);
+  padding: 0.45rem 0.9rem;
+  font-size: 0.68rem;
+  color: #6a6;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+@media (max-width: 700px) {
+  .htop-table-head,
+  .htop-row {
+    grid-template-columns: 40px 54px 1fr 50px;
+    grid-template-areas:
+      "pid user cpu mem"
+      "cmd cmd cmd cmd";
+  }
+  .htop-table-head span:nth-child(3),
+  .htop-table-head span:nth-child(4),
+  .htop-row span:nth-child(3),
+  .htop-row span:nth-child(4) {
+    display: none;
+  }
+}
+
+.skills-panel {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.skills-panel-htop {
+  overflow-y: auto;
+  padding-top: 0;
+}

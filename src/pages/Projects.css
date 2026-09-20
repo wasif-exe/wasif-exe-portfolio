@@ -1,0 +1,126 @@
+.projects-page {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  z-index: 2;
+  padding-top: 28px;
+  box-sizing: border-box;
+}
+
+.featured-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+  padding: 0.75rem 1rem 0.5rem;
+  z-index: 5;
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.featured-card {
+  text-decoration: none;
+  background: rgba(10, 10, 10, 0.82);
+  border: 1px solid rgba(57, 255, 20, 0.22);
+  border-radius: 10px;
+  padding: 0.85rem 1rem;
+  color: #ddd;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: border-color 0.2s ease, transform 0.2s ease, background 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  min-height: 118px;
+}
+
+.featured-card:hover {
+  border-color: rgba(57, 255, 20, 0.7);
+  background: rgba(15, 25, 15, 0.9);
+  transform: translateY(-2px);
+}
+
+.featured-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.featured-tag {
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  color: #39ff14;
+  border: 1px solid rgba(57, 255, 20, 0.35);
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  font-family: monospace;
+}
+
+.featured-metric {
+  font-size: 0.72rem;
+  color: #9f9;
+  font-family: monospace;
+  font-weight: 700;
+}
+
+.featured-title {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #fff;
+  font-family: monospace;
+}
+
+.featured-blurb {
+  margin: 0;
+  font-size: 0.72rem;
+  line-height: 1.35;
+  color: #999;
+  flex: 1;
+}
+
+.featured-link {
+  font-size: 0.7rem;
+  color: #39ff14;
+  font-family: monospace;
+  opacity: 0.8;
+}
+
+.projects-sphere {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+}
+
+.projects-fallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #39ff14;
+  font-size: 1.1rem;
+  font-family: monospace;
+}
+
+@media (max-width: 1100px) {
+  .featured-strip {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .featured-strip {
+    grid-template-columns: 1fr;
+    max-height: 32vh;
+    overflow-y: auto;
+  }
+  .featured-card {
+    min-height: auto;
+  }
+}

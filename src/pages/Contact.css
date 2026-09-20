@@ -1,0 +1,136 @@
+.contact-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  width: 100vw;
+  padding: 2rem;
+  gap: 3rem;
+  flex-wrap: wrap;
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+}
+
+.pixel-card-wrapper,
+.pixel-card {
+  width: 320px !important;
+  height: 420px !important;
+  position: relative !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border: 1px solid rgba(57, 255, 20, 0.3) !important;
+  background-color: rgba(10, 10, 10, 0.85) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+}
+
+.matrix-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.matrix-rain {
+  width: 100%;
+  height: 100%;
+  opacity: 0.35;
+}
+
+.pixel-hover-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.card-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+  align-items: center;
+}
+
+.contact-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.contact-links {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  position: relative;
+}
+
+.icon {
+  width: 42px;
+  height: 42px;
+  transition: transform 0.2s ease, filter 0.2s ease;
+  cursor: pointer;
+  filter: brightness(1.2);
+}
+
+.icon:hover {
+  transform: scale(1.12);
+  filter: brightness(1.5) drop-shadow(0 0 8px rgba(57, 255, 20, 0.6));
+}
+
+.username {
+  font-family: monospace;
+  color: #e0e0e0;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  text-align: center;
+}
+
+.username:hover {
+  color: #39ff14;
+}
+
+.tooltip {
+  position: absolute;
+  top: -24px;
+  background: #39ff14;
+  color: #000;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  font-family: monospace;
+}
+
+@media (max-width: 768px) {
+  .contact-container {
+    gap: 1.5rem;
+    padding: 5rem 1rem 6rem 1rem;
+    overflow-y: auto;
+  }
+
+  .pixel-card-wrapper,
+  .pixel-card {
+    width: 290px !important;
+    height: 360px !important;
+  }
+
+  .card-content {
+    gap: 1.25rem;
+  }
+
+  .icon {
+    width: 36px;
+    height: 36px;
+  }
+}

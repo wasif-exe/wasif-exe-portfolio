@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState } from "react";
 import "./ReflectiveCard.css";
 import { Fingerprint, Activity, Lock, Cpu } from "lucide-react";
 
@@ -16,46 +15,6 @@ const ReflectiveCard = ({
   className = "",
   style = {},
 }) => {
-  const videoRef = useRef(null);
-  const [hasCam, setHasCam] = useState(false);
-
-  useEffect(() => {
-    let stream = null;
-    let active = true;
-
-    const startWebcam = async () => {
-      try {
-        if (!navigator.mediaDevices?.getUserMedia) return;
-        stream = await navigator.mediaDevices.getUserMedia({
-          video: {
-            width: { ideal: 640 },
-            height: { ideal: 480 },
-            facingMode: "user",
-          },
-          audio: false,
-        });
-        if (!active) {
-          stream.getTracks().forEach((t) => t.stop());
-          return;
-        }
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-          setHasCam(true);
-        }
-      } catch {
-        setHasCam(false);
-      }
-    };
-
-    startWebcam();
-
-    return () => {
-      active = false;
-      if (stream) stream.getTracks().forEach((t) => t.stop());
-      if (videoRef.current) videoRef.current.srcObject = null;
-    };
-  }, []);
-
   const baseFrequency = 0.03 / Math.max(0.1, noiseScale);
   const saturation = 1 - Math.max(0, Math.min(1, grayscale));
 
@@ -70,7 +29,7 @@ const ReflectiveCard = ({
 
   return (
     <div
-      className={`reflective-card-container ${className} ${hasCam ? "has-cam" : "no-cam"}`}
+      className={`reflective-card-container no-cam ${className}`}
       style={{ ...style, ...cssVariables }}
     >
       <svg className="reflective-svg-filters" aria-hidden="true">
@@ -126,17 +85,7 @@ const ReflectiveCard = ({
         </defs>
       </svg>
 
-      <video
-        ref={videoRef}
-        autoPlay
-        playsInline
-        muted
-        className="reflective-video"
-        style={{ display: hasCam ? "block" : "none" }}
-      />
-
-      {!hasCam && <div className="reflective-fallback" />}
-
+      <div className="reflective-fallback" />
       <div className="reflective-noise" />
       <div className="reflective-sheen" />
       <div className="reflective-border" />

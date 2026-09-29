@@ -6,6 +6,7 @@ import GlitchText from "./components/GlitchText";
 import Dock from "./components/Dock";
 import LiveStats from "./components/LiveStats";
 import CommandPalette from "./components/CommandPalette";
+import OnboardingHints from "./components/OnboardingHints";
 import { playHover, playClick } from "./utils/sounds";
 import { VscHome, VscArchive, VscAccount, VscSettingsGear } from "react-icons/vsc";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
@@ -176,6 +177,7 @@ function App() {
         <div className="main-site">
           <LiveStats />
           <CommandPalette />
+          <OnboardingHints />
           <Clock />
           <BackgroundMusic volume={0.1} />
 
@@ -184,8 +186,8 @@ function App() {
               <GlitchText speed={1} enableShadows={true} enableOnHover={false}>
                 SYSTEMS ONLINE
               </GlitchText>
-              <p style={{ marginTop: '20px', color: '#666', fontFamily: 'monospace', opacity: 0.5 }}>
-                Press Ctrl+K for command palette
+              <p style={{ marginTop: "20px", color: "#666", fontFamily: "monospace", opacity: 0.55, fontSize: "0.8rem" }}>
+                dock below · Ctrl+K command palette
               </p>
             </div>
           )}

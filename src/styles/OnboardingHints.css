@@ -1,0 +1,132 @@
+.hint-dock {
+  position: fixed;
+  left: 50%;
+  bottom: 110px;
+  transform: translateX(-50%);
+  z-index: 10050;
+  cursor: pointer;
+  animation: hint-in 0.45s ease-out;
+  max-width: min(92vw, 420px);
+  width: 100%;
+  pointer-events: auto;
+}
+
+.hint-projects {
+  position: fixed;
+  left: 50%;
+  top: 42%;
+  transform: translate(-50%, -50%);
+  z-index: 10050;
+  cursor: pointer;
+  animation: hint-in 0.45s ease-out;
+  max-width: min(92vw, 460px);
+  width: 100%;
+  pointer-events: auto;
+}
+
+.hint-bubble {
+  background: rgba(6, 10, 6, 0.92);
+  border: 1px solid rgba(57, 255, 20, 0.45);
+  border-radius: 12px;
+  padding: 0.9rem 1rem 0.85rem;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.55), 0 0 24px rgba(57, 255, 20, 0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #d8d8d8;
+  font-family: "Courier New", Courier, monospace;
+  text-align: center;
+}
+
+.hint-bubble.projects {
+  text-align: left;
+}
+
+.hint-kicker {
+  display: inline-block;
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  color: #39ff14;
+  border: 1px solid rgba(57, 255, 20, 0.35);
+  border-radius: 4px;
+  padding: 0.15rem 0.45rem;
+  margin-bottom: 0.55rem;
+}
+
+.hint-bubble p {
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.hint-bubble b {
+  color: #fff;
+  font-weight: 700;
+}
+
+.hint-sub {
+  margin-top: 0.55rem !important;
+  font-size: 0.7rem !important;
+  color: #7a7 !important;
+}
+
+.hint-bubble kbd {
+  display: inline-block;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  padding: 0 0.3rem;
+  font-size: 0.68rem;
+  color: #39ff14;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.hint-arrow {
+  width: 12px;
+  height: 12px;
+  margin: 0 auto;
+  border-right: 1px solid rgba(57, 255, 20, 0.45);
+  border-bottom: 1px solid rgba(57, 255, 20, 0.45);
+  transform: rotate(45deg);
+  background: rgba(6, 10, 6, 0.92);
+  margin-top: -7px;
+}
+
+@keyframes hint-in {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.hint-projects {
+  animation: hint-in-center 0.45s ease-out;
+}
+
+@keyframes hint-in-center {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -46%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+@media (max-width: 768px) {
+  .hint-dock {
+    bottom: 100px;
+  }
+
+  .hint-projects {
+    top: 38%;
+  }
+
+  .hint-bubble p {
+    font-size: 0.78rem;
+  }
+}

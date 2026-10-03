@@ -568,24 +568,52 @@ this.gl = this.canvas.getContext("webgl2", {
       this.items.map(
         (item) =>
           new Promise((resolve) => {
-            const img = new Image();
-            img.crossOrigin = "anonymous";
-            img.onload = () => resolve(img);
-            img.onerror = () => {
-              const fallback = new Image();
-              fallback.crossOrigin = "anonymous";
-              fallback.src = fallbackImage;
-              fallback.onload = () => resolve(fallback);
+            const fallbackImage =
+              "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png";
+
+            const tryLoad = (src, onFail) => {
+              if (!src) return onFail();
+              const img = new Image();
+              img.crossOrigin = "anonymous";
+              img.onload = () => resolve(img);
+              img.onerror = onFail;
+              img.src = src;
             };
-            img.src = item.image;
+
+            if (item.preferredImage) {
+              tryLoad(item.preferredImage, () => {
+                tryLoad(item.image || fallbackImage, () => {
+                  tryLoad(fallbackImage, () => resolve(null));
+                });
+              });
+            } else {
+              tryLoad(item.image || fallbackImage, () => {
+                tryLoad(fallbackImage, () => resolve(null));
+              });
+            }
           })
       )
-    ).then((images) => {
+     ).then((images) => {
       images.forEach((img, i) => {
+        if (!img) return;
         const x = (i % this.atlasSize) * cellSize;
         const y = Math.floor(i / this.atlasSize) * cellSize;
-        ctx.drawImage(img, x, y, cellSize, cellSize);
+
+        ctx.fillStyle = "#0a0a0a";
+        ctx.fillRect(x, y, cellSize, cellSize);
+
+        const iw = img.width || 1;
+        const ih = img.height || 1;
+        const pad = 28;
+        const scale = Math.min((cellSize - pad * 2) / iw, (cellSize - pad * 2) / ih);
+        const dw = iw * scale;
+        const dh = ih * scale;
+        const dx = x + (cellSize - dw) / 2;
+        const dy = y + (cellSize - dh) / 2;
+
+        ctx.drawImage(img, dx, dy, dw, dh);
       });
+
       gl.bindTexture(gl.TEXTURE_2D, this.tex);
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, canvas);
       gl.generateMipmap(gl.TEXTURE_2D);

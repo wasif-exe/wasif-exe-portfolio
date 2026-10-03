@@ -41,44 +41,63 @@ const FEATURED_PROJECTS = [
 
 const FALLBACK_REPOS = [
   {
-    image: "https://raw.githubusercontent.com/wasif-exe/lsm-engine/main/logo.png",
+    image: "https://opengraph.githubassets.com/1/wasif-exe/lsm-engine",
     link: "https://github.com/wasif-exe/lsm-engine",
     title: "lsm-engine",
     description: "Thread-Per-Core io_uring LSM-Tree Storage Engine in Rust",
   },
   {
-    image: "https://raw.githubusercontent.com/wasif-exe/wire/main/logo.png",
+    image: "https://opengraph.githubassets.com/1/wasif-exe/wire",
     link: "https://github.com/wasif-exe/wire",
     title: "wire",
     description: "Userspace TCP/IP Stack & Zero-I/O Protocol Engine in Rust",
   },
   {
-    image: "https://raw.githubusercontent.com/wasif-exe/raft-rupee/main/logo.png",
+    image: "https://opengraph.githubassets.com/1/wasif-exe/raft-rupee",
     link: "https://github.com/wasif-exe/raft-rupee",
     title: "raft-rupee",
     description: "Pure Consensus Kernel & Deterministic Chaos Simulator",
   },
   {
-    image: "https://raw.githubusercontent.com/wasif-exe/ringfree-kv/main/logo.png",
+    image: "https://opengraph.githubassets.com/1/wasif-exe/ringfree-kv",
     link: "https://github.com/wasif-exe/ringfree-kv",
     title: "ringfree-kv",
     description: "Lock-Free Lockless Memory KV Store Engine",
   },
   {
-    image: "https://raw.githubusercontent.com/wasif-exe/ASRA-Autonomous-System-Resilience-Agent/main/logo.png",
+    image: "https://opengraph.githubassets.com/1/wasif-exe/ASRA-Autonomous-System-Resilience-Agent",
     link: "https://github.com/wasif-exe/ASRA-Autonomous-System-Resilience-Agent",
     title: "ASRA",
     description: "Autonomous System Resilience Agent",
   },
   {
-    image: "https://raw.githubusercontent.com/wasif-exe/anti-deep-fake/main/logo.png",
+    image: "https://opengraph.githubassets.com/1/wasif-exe/anti-deep-fake",
     link: "https://github.com/wasif-exe/anti-deep-fake",
     title: "anti-deep-fake",
     description: "Real-time Detection Engine",
   },
+  {
+    image: "https://opengraph.githubassets.com/1/wasif-exe/AdaptiControl",
+    link: "https://github.com/wasif-exe/AdaptiControl",
+    title: "AdaptiControl",
+    description: "Adaptive control systems project",
+  },
+  {
+    image: "https://opengraph.githubassets.com/1/wasif-exe/wasif-exe",
+    link: "https://github.com/wasif-exe/wasif-exe",
+    title: "wasif-exe",
+    description: "Profile / meta repository",
+  },
 ];
 
 const FEATURED_KEYS = ["lsm", "wire", "raft", "ringfree", "mark", "io_uring", "kernel", "tcp"];
+
+function repoImage(owner, name, branch = "main") {
+  return {
+    preferred: `https://raw.githubusercontent.com/${owner}/${name}/${branch}/logo.png`,
+    fallback: `https://opengraph.githubassets.com/1/${owner}/${name}`,
+  };
+}
 
 function Projects() {
   const [repos, setRepos] = useState([]);
@@ -93,6 +112,7 @@ function Projects() {
       })
       .then((data) => {
         if (cancelled || !Array.isArray(data)) return;
+
         const sorted = [...data].sort((a, b) => {
           const aF = FEATURED_KEYS.some((k) => a.name.toLowerCase().includes(k));
           const bF = FEATURED_KEYS.some((k) => b.name.toLowerCase().includes(k));
@@ -100,19 +120,26 @@ function Projects() {
           if (!aF && bF) return 1;
           return new Date(b.pushed_at) - new Date(a.pushed_at);
         });
-        setRepos(
-          sorted.slice(0, 24).map((repo) => ({
-            image: `https://raw.githubusercontent.com/wasif-exe/${repo.name}/${repo.default_branch}/logo.png`,
+
+        const mapped = sorted.slice(0, 24).map((repo) => {
+          const imgs = repoImage(
+            "wasif-exe",
+            repo.name,
+            repo.default_branch || "main"
+          );
+          return {
+            image: imgs.fallback,
+            preferredImage: imgs.preferred,
             link: repo.html_url,
             title: repo.name,
             description: repo.description || "Systems / low-latency project.",
-          }))
-        );
+          };
+        });
+
+        setRepos(mapped);
       })
       .catch(() => {
-        if (!cancelled) {
-          setRepos(FALLBACK_REPOS);
-        }
+        if (!cancelled) setRepos(FALLBACK_REPOS);
       });
 
     return () => {
@@ -122,11 +149,6 @@ function Projects() {
 
   return (
     <div className="projects-page">
-      <div className="projects-guide">
-        <span className="guide-pill">FEATURED</span>
-        <span className="guide-text">flagship systems work — click a card</span>
-      </div>
-
       <div className="featured-strip">
         {FEATURED_PROJECTS.map((p) => (
           <a
@@ -151,11 +173,6 @@ function Projects() {
             </span>
           </a>
         ))}
-      </div>
-
-      <div className="projects-guide sphere-guide">
-        <span className="guide-pill">ALL REPOS</span>
-        <span className="guide-text">drag to rotate · open button on focus</span>
       </div>
 
       <div className="projects-sphere">

@@ -22,16 +22,16 @@ const skillItems = [
 ];
 
 const HTOP_ROWS = [
-  { pid: 101, user: "wasif", pr: -20, name: "rust_runtime", cpu: 96, mem: 18, state: "R" },
-  { pid: 102, user: "wasif", pr: -15, name: "io_uring_sqpoll", cpu: 88, mem: 12, state: "R" },
-  { pid: 103, user: "wasif", pr: -10, name: "lsm_flush_worker", cpu: 74, mem: 22, state: "R" },
-  { pid: 104, user: "wasif", pr: -5, name: "tcp_input_path", cpu: 69, mem: 9, state: "S" },
-  { pid: 105, user: "root", pr: 0, name: "raft_tick_kernel", cpu: 61, mem: 7, state: "R" },
-  { pid: 106, user: "wasif", pr: 5, name: "ebr_reclaimer", cpu: 44, mem: 6, state: "S" },
-  { pid: 107, user: "wasif", pr: 10, name: "skip_list_mt", cpu: 38, mem: 14, state: "R" },
-  { pid: 108, user: "wasif", pr: 10, name: "bloom_avx2", cpu: 33, mem: 5, state: "S" },
-  { pid: 109, user: "wasif", pr: 15, name: "chaos_simulator", cpu: 21, mem: 4, state: "S" },
-  { pid: 110, user: "wasif", pr: 20, name: "loom_model_check", cpu: 12, mem: 8, state: "S" },
+  { pid: 101, pr: -20, name: "rust_runtime", cpu: 96, mem: 18, state: "R" },
+  { pid: 102, pr: -15, name: "io_uring_sqpoll", cpu: 88, mem: 12, state: "R" },
+  { pid: 103, pr: -10, name: "lsm_flush_worker", cpu: 74, mem: 22, state: "R" },
+  { pid: 104, pr: -5, name: "tcp_input_path", cpu: 69, mem: 9, state: "S" },
+  { pid: 105, pr: 0, name: "raft_tick_kernel", cpu: 61, mem: 7, state: "R" },
+  { pid: 106, pr: 5, name: "ebr_reclaimer", cpu: 44, mem: 6, state: "S" },
+  { pid: 107, pr: 10, name: "skip_list_mt", cpu: 38, mem: 14, state: "R" },
+  { pid: 108, pr: 10, name: "bloom_avx2", cpu: 33, mem: 5, state: "S" },
+  { pid: 109, pr: 15, name: "chaos_simulator", cpu: 21, mem: 4, state: "S" },
+  { pid: 110, pr: 20, name: "loom_model_check", cpu: 12, mem: 8, state: "S" },
 ];
 
 function HtopView() {
@@ -63,7 +63,6 @@ function HtopView() {
       </div>
       <div className="htop-table-head">
         <span>PID</span>
-        <span>USER</span>
         <span>PR</span>
         <span>S</span>
         <span>CPU%</span>
@@ -72,15 +71,16 @@ function HtopView() {
       </div>
       {rows.map((r) => (
         <div className="htop-row" key={r.pid}>
-          <span>{r.pid}</span>
-          <span>{r.user}</span>
-          <span>{r.pr}</span>
-          <span className={r.state === "R" ? "state-r" : "state-s"}>{r.state}</span>
+          <span className="col-pid">{r.pid}</span>
+          <span className="col-pr">{r.pr}</span>
+          <span className={`col-state ${r.state === "R" ? "state-r" : "state-s"}`}>
+            {r.state}
+          </span>
           <span className="cpu-cell">
             <span className="cpu-bar" style={{ width: `${r.cpu}%` }} />
             <span className="cpu-label">{r.cpu.toFixed(1)}</span>
           </span>
-          <span>{r.mem.toFixed(1)}</span>
+          <span className="col-mem">{r.mem.toFixed(1)}</span>
           <span className="cmd-cell">{r.name}</span>
         </div>
       ))}

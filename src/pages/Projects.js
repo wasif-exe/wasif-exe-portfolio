@@ -4,6 +4,18 @@ import "./Projects.css";
 
 const InfiniteMenu = React.lazy(() => import("./components/InfiniteMenu"));
 
+
+const EXCLUDED_REPOS = [
+  "wasif-exe",        
+  "AdaptiControl",    
+  "wasif-exe.github.io",
+  "First-Portfolio"  ,
+  "exif-remover",
+  "arp-lanscan",
+  "ImageObfuscatorPro"
+
+];
+
 const FEATURED_PROJECTS = [
   {
     name: "lsm-engine",
@@ -70,25 +82,9 @@ const FALLBACK_REPOS = [
     title: "ASRA",
     description: "Autonomous System Resilience Agent",
   },
-  {
-    image: "https://opengraph.githubassets.com/1/wasif-exe/anti-deep-fake",
-    link: "https://github.com/wasif-exe/anti-deep-fake",
-    title: "anti-deep-fake",
-    description: "Real-time Detection Engine",
-  },
-  {
-    image: "https://opengraph.githubassets.com/1/wasif-exe/AdaptiControl",
-    link: "https://github.com/wasif-exe/AdaptiControl",
-    title: "AdaptiControl",
-    description: "Adaptive control systems project",
-  },
-  {
-    image: "https://opengraph.githubassets.com/1/wasif-exe/wasif-exe",
-    link: "https://github.com/wasif-exe/wasif-exe",
-    title: "wasif-exe",
-    description: "Profile / meta repository",
-  },
-];
+].filter((repo) =>
+  !EXCLUDED_REPOS.some((ex) => repo.title.toLowerCase().includes(ex.toLowerCase()))
+);
 
 const FEATURED_KEYS = ["lsm", "wire", "raft", "ringfree", "mark", "io_uring", "kernel", "tcp"];
 
@@ -113,7 +109,14 @@ function Projects() {
       .then((data) => {
         if (cancelled || !Array.isArray(data)) return;
 
-        const sorted = [...data].sort((a, b) => {
+        // 📌 Filter out forks and any repos listed in EXCLUDED_REPOS
+        const filtered = data.filter((repo) => {
+          if (repo.fork) return false;
+          const repoName = repo.name.toLowerCase();
+          return !EXCLUDED_REPOS.some((ex) => repoName.includes(ex.toLowerCase()));
+        });
+
+        const sorted = [...filtered].sort((a, b) => {
           const aF = FEATURED_KEYS.some((k) => a.name.toLowerCase().includes(k));
           const bF = FEATURED_KEYS.some((k) => b.name.toLowerCase().includes(k));
           if (aF && !bF) return -1;

@@ -16,12 +16,12 @@ const EXCLUDED_REPOS = [
 
 const FEATURED_PROJECTS = [
   {
-    name: "Apex-Wire",
-    title: "Apex-Wire",
-    metric: "HIGH-PERF",
-    blurb: "High-performance wire path · zero-copy systems networking core",
-    link: "https://github.com/wasif-exe/Apex-Wire",
-    tag: "NET",
+    name: "lsm-engine",
+    title: "LSM Storage Engine",
+    metric: "440K ops/sec",
+    blurb: "Thread-per-core · io_uring · lock-free MemTable · NVMe path",
+    link: "https://github.com/wasif-exe/lsm-engine",
+    tag: "STORAGE",
   },
   {
     name: "wire",
@@ -32,12 +32,12 @@ const FEATURED_PROJECTS = [
     tag: "NET",
   },
   {
-    name: "lsm-engine",
-    title: "LSM Storage Engine",
-    metric: "440K ops/sec",
-    blurb: "Thread-per-core · io_uring · lock-free MemTable · NVMe path",
-    link: "https://github.com/wasif-exe/lsm-engine",
-    tag: "STORAGE",
+    name: "raft-rupee",
+    title: "Raft Consensus Kernel",
+    metric: "397K ticks/sec",
+    blurb: "Pure state-machine · no async runtime · safety invariants",
+    link: "https://github.com/wasif-exe/raft-rupee",
+    tag: "DIST",
   },
   {
     name: "mark-v",
@@ -51,11 +51,11 @@ const FEATURED_PROJECTS = [
 
 const FALLBACK_REPOS = [
   {
-    preferredImage: "https://raw.githubusercontent.com/wasif-exe/Apex-Wire/main/logo.png",
-    image: "https://opengraph.githubassets.com/1/wasif-exe/Apex-Wire",
-    link: "https://github.com/wasif-exe/Apex-Wire",
-    title: "Apex-Wire",
-    description: "High-performance wire path · systems networking core",
+    preferredImage: "https://raw.githubusercontent.com/wasif-exe/lsm-engine/main/logo.png",
+    image: "https://opengraph.githubassets.com/1/wasif-exe/lsm-engine",
+    link: "https://github.com/wasif-exe/lsm-engine",
+    title: "lsm-engine",
+    description: "Thread-Per-Core io_uring LSM-Tree Storage Engine in Rust",
   },
   {
     preferredImage: "https://raw.githubusercontent.com/wasif-exe/wire/main/logo.png",
@@ -63,13 +63,6 @@ const FALLBACK_REPOS = [
     link: "https://github.com/wasif-exe/wire",
     title: "wire",
     description: "Userspace TCP/IP Stack & Zero-I/O Protocol Engine in Rust",
-  },
-  {
-    preferredImage: "https://raw.githubusercontent.com/wasif-exe/lsm-engine/main/logo.png",
-    image: "https://opengraph.githubassets.com/1/wasif-exe/lsm-engine",
-    link: "https://github.com/wasif-exe/lsm-engine",
-    title: "lsm-engine",
-    description: "Thread-Per-Core io_uring LSM-Tree Storage Engine in Rust",
   },
   {
     preferredImage: "https://raw.githubusercontent.com/wasif-exe/raft-rupee/main/logo.png",
@@ -85,14 +78,18 @@ const FALLBACK_REPOS = [
     title: "ringfree-kv",
     description: "Lock-Free Lockless Memory KV Store Engine",
   },
-].filter(
-  (repo) =>
-    !EXCLUDED_REPOS.some((ex) =>
-      repo.title.toLowerCase().includes(ex.toLowerCase())
-    )
+  {
+    preferredImage: "https://raw.githubusercontent.com/wasif-exe/ASRA-Autonomous-System-Resilience-Agent/main/logo.png",
+    image: "https://opengraph.githubassets.com/1/wasif-exe/ASRA-Autonomous-System-Resilience-Agent",
+    link: "https://github.com/wasif-exe/ASRA-Autonomous-System-Resilience-Agent",
+    title: "ASRA",
+    description: "Autonomous System Resilience Agent",
+  },
+].filter((repo) =>
+  !EXCLUDED_REPOS.some((ex) => repo.title.toLowerCase().includes(ex.toLowerCase()))
 );
 
-const FEATURED_KEYS = ["apex", "wire", "lsm", "raft", "ringfree", "mark", "io_uring", "kernel", "tcp"];
+const FEATURED_KEYS = ["lsm", "wire", "raft", "ringfree", "mark", "io_uring", "kernel", "tcp"];
 
 function repoImage(owner, name, branch = "main") {
   return {
@@ -115,12 +112,11 @@ function Projects() {
       .then((data) => {
         if (cancelled || !Array.isArray(data)) return;
 
+        // 📌 Filter out forks and any repos listed in EXCLUDED_REPOS
         const filtered = data.filter((repo) => {
           if (repo.fork) return false;
           const repoName = repo.name.toLowerCase();
-          return !EXCLUDED_REPOS.some((ex) =>
-            repoName.includes(ex.toLowerCase())
-          );
+          return !EXCLUDED_REPOS.some((ex) => repoName.includes(ex.toLowerCase()));
         });
 
         const sorted = [...filtered].sort((a, b) => {
@@ -186,9 +182,7 @@ function Projects() {
       </div>
 
       <div className="projects-sphere">
-        <Suspense
-          fallback={<div className="projects-fallback">Loading 3D Menu...</div>}
-        >
+        <Suspense fallback={<div className="projects-fallback">Loading 3D Menu...</div>}>
           {repos.length > 0 ? (
             <InfiniteMenu items={repos} />
           ) : (

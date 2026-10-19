@@ -14,8 +14,6 @@ const EXCLUDED_REPOS = [
   "ImageObfuscatorPro",
 ];
 
-const PINNED_REPOS = ["lsm-engine", "wire", "raft-rupee"];
-
 const MARK_V_CARD = {
   name: "mark-v",
   title: "Mark V Decision Engine",
@@ -26,17 +24,17 @@ const MARK_V_CARD = {
 };
 
 const REPO_META = {
-  "lsm-engine": {
-    title: "LSM Storage Engine",
-    metric: "440K ops/sec",
-    blurb: "Thread-per-core · io_uring · lock-free MemTable · NVMe path",
-    tag: "STORAGE",
-  },
   wire: {
     title: "Wire TCP/IP Stack",
     metric: "RFC 9293",
     blurb: "Userspace TCP · Reno · TAP · deterministic chaos harness",
     tag: "NET",
+  },
+  "lsm-engine": {
+    title: "LSM Storage Engine",
+    metric: "440K ops/sec",
+    blurb: "Thread-per-core · io_uring · lock-free MemTable · NVMe path",
+    tag: "STORAGE",
   },
   "raft-rupee": {
     title: "Raft Consensus Kernel",
@@ -54,22 +52,22 @@ const REPO_META = {
 
 const FALLBACK_API = [
   {
-    name: "lsm-engine",
-    description: "Thread-Per-Core io_uring LSM-Tree Storage Engine in Rust",
-    html_url: "https://github.com/wasif-exe/lsm-engine",
-    stargazers_count: 14,
-    language: "Rust",
-    pushed_at: "2025-02-15T10:00:00Z",
-    fork: false,
-    default_branch: "main",
-  },
-  {
     name: "wire",
     description: "Userspace TCP/IP Stack & Zero-I/O Protocol Engine in Rust",
     html_url: "https://github.com/wasif-exe/wire",
     stargazers_count: 19,
     language: "Rust",
     pushed_at: "2025-02-18T12:00:00Z",
+    fork: false,
+    default_branch: "main",
+  },
+  {
+    name: "lsm-engine",
+    description: "Thread-Per-Core io_uring LSM-Tree Storage Engine in Rust",
+    html_url: "https://github.com/wasif-exe/lsm-engine",
+    stargazers_count: 14,
+    language: "Rust",
+    pushed_at: "2025-02-15T10:00:00Z",
     fork: false,
     default_branch: "main",
   },
@@ -97,18 +95,18 @@ const FALLBACK_API = [
 
 const FALLBACK_SPHERE = [
   {
-    preferredImage: "https://raw.githubusercontent.com/wasif-exe/lsm-engine/main/logo.png",
-    image: "https://opengraph.githubassets.com/1/wasif-exe/lsm-engine",
-    link: "https://github.com/wasif-exe/lsm-engine",
-    title: "lsm-engine",
-    description: "Thread-Per-Core io_uring LSM-Tree Storage Engine in Rust",
-  },
-  {
     preferredImage: "https://raw.githubusercontent.com/wasif-exe/wire/main/logo.png",
     image: "https://opengraph.githubassets.com/1/wasif-exe/wire",
     link: "https://github.com/wasif-exe/wire",
     title: "wire",
     description: "Userspace TCP/IP Stack & Zero-I/O Protocol Engine in Rust",
+  },
+  {
+    preferredImage: "https://raw.githubusercontent.com/wasif-exe/lsm-engine/main/logo.png",
+    image: "https://opengraph.githubassets.com/1/wasif-exe/lsm-engine",
+    link: "https://github.com/wasif-exe/lsm-engine",
+    title: "lsm-engine",
+    description: "Thread-Per-Core io_uring LSM-Tree Storage Engine in Rust",
   },
   {
     preferredImage: "https://raw.githubusercontent.com/wasif-exe/raft-rupee/main/logo.png",
@@ -124,21 +122,7 @@ const FALLBACK_SPHERE = [
     title: "ringfree-kv",
     description: "Lock-Free Lockless Memory KV Store Engine",
   },
-  {
-    preferredImage:
-      "https://raw.githubusercontent.com/wasif-exe/ASRA-Autonomous-System-Resilience-Agent/main/logo.png",
-    image:
-      "https://opengraph.githubassets.com/1/wasif-exe/ASRA-Autonomous-System-Resilience-Agent",
-    link: "https://github.com/wasif-exe/ASRA-Autonomous-System-Resilience-Agent",
-    title: "ASRA",
-    description: "Autonomous System Resilience Agent",
-  },
-].filter(
-  (repo) =>
-    !EXCLUDED_REPOS.some((ex) =>
-      repo.title.toLowerCase().includes(ex.toLowerCase())
-    )
-);
+];
 
 function repoImage(owner, name, branch = "main") {
   return {
@@ -148,67 +132,75 @@ function repoImage(owner, name, branch = "main") {
 }
 
 function isExcluded(name) {
-  const n = name.toLowerCase();
+  const n = (name || "").toLowerCase();
   return EXCLUDED_REPOS.some((ex) => n.includes(ex.toLowerCase()));
 }
 
-function buildFeaturedCards(apiRepos) {
-  const filtered = (apiRepos || []).filter((repo) => {
-    if (!repo || repo.fork) return false;
-    if (isExcluded(repo.name)) return false;
-    if (repo.name.toLowerCase() === "mark-v") return false;
-    return true;
+function toCard(repo) {
+  const key = (repo.name || "").toLowerCase();
+  const meta =
+    REPO_META[repo.name] ||
+    REPO_META[key] ||
+    Object.entries(REPO_META).find(([k]) => k.toLowerCase() === key)?.[1] ||
+    {};
+
+  const stars = repo.stargazers_count || 0;
+  const metric =
+    meta.metric || (stars > 0 ? `⭐ ${stars}` : repo.language || "SYS");
+
+  return {
+    name: repo.name,
+    title: meta.title || repo.name,
+    metric,
+    blurb: meta.blurb || repo.description || "Systems / low-latency project.",
+    link: repo.html_url,
+    tag: meta.tag || (repo.language || "REPO").toUpperCase().slice(0, 8),
+  };
+}
+
+function buildFeaturedCards(apiRepos, livePinnedNames) {
+  const byName = new Map();
+  (apiRepos || []).forEach((repo) => {
+    if (!repo || repo.fork) return;
+    if (isExcluded(repo.name)) return;
+    if ((repo.name || "").toLowerCase() === "mark-v") return;
+    byName.set(repo.name.toLowerCase(), repo);
   });
 
-  const sorted = [...filtered].sort((a, b) => {
-    const pinA = PINNED_REPOS.findIndex(
-      (p) => p.toLowerCase() === a.name.toLowerCase()
-    );
-    const pinB = PINNED_REPOS.findIndex(
-      (p) => p.toLowerCase() === b.name.toLowerCase()
-    );
+  const picked = [];
+  const used = new Set();
 
-    if (pinA !== -1 && pinB !== -1) return pinA - pinB;
-    if (pinA !== -1) return -1;
-    if (pinB !== -1) return 1;
+  if (Array.isArray(livePinnedNames) && livePinnedNames.length > 0) {
+    livePinnedNames.forEach((pinName) => {
+      if (picked.length >= 3) return;
+      const repo = byName.get(pinName.toLowerCase());
+      if (!repo) return;
+      picked.push(toCard(repo));
+      used.add(repo.name.toLowerCase());
+    });
+  }
 
-    const starsA = a.stargazers_count || 0;
-    const starsB = b.stargazers_count || 0;
-    if (starsB !== starsA) return starsB - starsA;
+  if (picked.length < 3) {
+    const rest = [...byName.values()]
+      .filter((r) => !used.has(r.name.toLowerCase()))
+      .sort((a, b) => {
+        const starsA = a.stargazers_count || 0;
+        const starsB = b.stargazers_count || 0;
+        if (starsB !== starsA) return starsB - starsA;
+        return (
+          new Date(b.pushed_at || b.updated_at || 0).getTime() -
+          new Date(a.pushed_at || a.updated_at || 0).getTime()
+        );
+      });
 
-    return (
-      new Date(b.pushed_at || b.updated_at || 0).getTime() -
-      new Date(a.pushed_at || a.updated_at || 0).getTime()
-    );
-  });
+    for (const repo of rest) {
+      if (picked.length >= 3) break;
+      picked.push(toCard(repo));
+      used.add(repo.name.toLowerCase());
+    }
+  }
 
-  const dynamic = sorted.slice(0, 3).map((repo) => {
-    const key = repo.name.toLowerCase();
-    const meta =
-      REPO_META[repo.name] ||
-      REPO_META[key] ||
-      Object.entries(REPO_META).find(([k]) => k.toLowerCase() === key)?.[1] ||
-      {};
-
-    const stars = repo.stargazers_count || 0;
-    const metric =
-      meta.metric ||
-      (stars > 0 ? `⭐ ${stars}` : repo.language || "SYS");
-
-    return {
-      name: repo.name,
-      title: meta.title || repo.name,
-      metric,
-      blurb:
-        meta.blurb ||
-        repo.description ||
-        "Systems / low-latency project.",
-      link: repo.html_url,
-      tag: meta.tag || (repo.language || "REPO").toUpperCase().slice(0, 8),
-    };
-  });
-
-  return [MARK_V_CARD, ...dynamic];
+  return [MARK_V_CARD, ...picked];
 }
 
 function mapSphereRepos(apiRepos) {
@@ -218,15 +210,6 @@ function mapSphereRepos(apiRepos) {
   });
 
   const sorted = [...filtered].sort((a, b) => {
-    const pinA = PINNED_REPOS.findIndex(
-      (p) => p.toLowerCase() === a.name.toLowerCase()
-    );
-    const pinB = PINNED_REPOS.findIndex(
-      (p) => p.toLowerCase() === b.name.toLowerCase()
-    );
-    if (pinA !== -1 && pinB !== -1) return pinA - pinB;
-    if (pinA !== -1) return -1;
-    if (pinB !== -1) return 1;
     const starsA = a.stargazers_count || 0;
     const starsB = b.stargazers_count || 0;
     if (starsB !== starsA) return starsB - starsA;
@@ -253,14 +236,24 @@ function mapSphereRepos(apiRepos) {
 
 function Projects() {
   const [apiRepos, setApiRepos] = useState([]);
+  const [livePinned, setLivePinned] = useState([]);
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
 
+    fetch("https://gh-pinned-repos.onesec.dev/api/user/wasif-exe")
+      .then((r) => (r.ok ? r.json() : []))
+      .then((data) => {
+        if (cancelled || !Array.isArray(data)) return;
+        const names = data.map((item) => item.repo || item.name).filter(Boolean);
+        setLivePinned(names);
+      })
+      .catch(() => {});
+
     fetch("https://api.github.com/users/wasif-exe/repos?per_page=100&sort=updated")
       .then((r) => {
-        if (!r.ok) throw new Error("API Limit / HTTP Error");
+        if (!r.ok) throw new Error("API Limit");
         return r.json();
       })
       .then((data) => {
@@ -283,7 +276,10 @@ function Projects() {
 
   const source = apiRepos.length > 0 ? apiRepos : FALLBACK_API;
 
-  const featured = useMemo(() => buildFeaturedCards(source), [source]);
+  const featured = useMemo(
+    () => buildFeaturedCards(source, livePinned),
+    [source, livePinned]
+  );
 
   const sphereItems = useMemo(() => {
     if (!loaded && apiRepos.length === 0) return [];
